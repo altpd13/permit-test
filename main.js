@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { abi } from "./abi.js";
+import { fiatTokenAbi } from "./fiatTokenAbi.js";
 import { byteCode } from "./bytecode.js";
 import { ethers } from "ethers";
 
@@ -82,7 +82,7 @@ async function main() {
   const signerVaultEOA = new ethers.Wallet(vaultEOAPk, provider);
   const KRWCContract = new ethers.Contract(
     KRWCProxyAddress,
-    abi,
+    fiatTokenAbi,
     signerVaultEOA
   );
 
@@ -99,7 +99,7 @@ async function main() {
   console.log(v);
   console.log(r);
   console.log(s);
-  
+
   const result = await KRWCContract["permit"](
     endUser1Addr,
     vaultEOAAddr,
@@ -120,11 +120,14 @@ async function main() {
       amount
     );
     console.log(resultTransferFrom);
+  }, 2500);
+
+  setTimeout(async () => {
     const balance1 = await KRWCContract["balanceOf"](endUser1Addr);
     const balance2 = await KRWCContract["balanceOf"](endUser2Address);
     console.log("user 1: " + balance1);
     console.log("user 2: " + balance2);
-  }, 1000);
+  }, 5000);
 }
 
 await main();
